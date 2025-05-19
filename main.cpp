@@ -1,31 +1,27 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <map> // Подключите заголовочный файл для map
+#include <map>
 
-// Интерфейс для стратегии доставки
 class ShippingStrategy {
 public:
     virtual void shipOrder(const std::string& address) = 0;
 };
 
-// Конкретная реализация стандартной доставки
 class StandardShipping : public ShippingStrategy {
 public:
     void shipOrder(const std::string& address) override {
-        std::cout << "Доставка стандартной почтой по адресу: " << address << std::endl;
+        std::cout << "Г„Г®Г±ГІГ ГўГЄГ  Г±ГІГ Г­Г¤Г Г°ГІГ­Г®Г© ГЇГ®Г·ГІГ®Г© ГЇГ® Г Г¤Г°ГҐГ±Гі: " << address << std::endl;
     }
 };
 
-// Конкретная реализация экспресс-доставки
 class ExpressShipping : public ShippingStrategy {
 public:
     void shipOrder(const std::string& address) override {
-        std::cout << "Доставка экспресс-почтой по адресу: " << address << std::endl;
+        std::cout << "Г„Г®Г±ГІГ ГўГЄГ  ГЅГЄГ±ГЇГ°ГҐГ±Г±-ГЇГ®Г·ГІГ®Г© ГЇГ® Г Г¤Г°ГҐГ±Гі: " << address << std::endl;
     }
 };
 
-// Класс для хранения запасов
 class Stock {
 public:
     void addClothes(const std::string& name, int quantity) {
@@ -37,36 +33,31 @@ public:
     }
 
 private:
-    std::map<std::string, int> clothes; // clothes в private
+    std::map<std::string, int> clothes; 
 };
 
-// Класс для обработки платежей
 class Checkout {
 public:
     void processPayment(double amount) {
-        std::cout << "Оплата " << amount << " успешно обработана" << std::endl;
+        std::cout << "ГЋГЇГ«Г ГІГ  " << amount << " ГіГ±ГЇГҐГёГ­Г® Г®ГЎГ°Г ГЎГ®ГІГ Г­Г " << std::endl;
     }
 };
 
-// Класс для доставки заказов
 class Delivery {
 public:
     void deliverOrder(const std::string& address) {
-        std::cout << "Заказ доставлен по адресу: " << address << std::endl;
+        std::cout << "Г‡Г ГЄГ Г§ Г¤Г®Г±ГІГ ГўГ«ГҐГ­ ГЇГ® Г Г¤Г°ГҐГ±Гі: " << address << std::endl;
     }
 };
 
-// Фасад для магазина одежды
 class ClothingStore {
 public:
     ClothingStore() : stock(), checkout(), delivery() {}
 
-    // Добавление товара в запасы
     void addClothes(const std::string& name, int quantity) {
         stock.addClothes(name, quantity);
     }
 
-    // Заказ товара
     void orderClothes(const std::string& name, int quantity, const std::string& address,
         ShippingStrategy* strategy) {
         if (stock.getQuantity(name) >= quantity) {
@@ -75,13 +66,12 @@ public:
             strategy->shipOrder(address);
         }
         else {
-            std::cout << "Недостаточно товара на складе." << std::endl;
+            std::cout << "ГЌГҐГ¤Г®Г±ГІГ ГІГ®Г·Г­Г® ГІГ®ГўГ Г°Г  Г­Г  Г±ГЄГ«Г Г¤ГҐ." << std::endl;
         }
     }
 
 private:
     double calculatePrice(const std::string& name, int quantity) {
-        // Упрощенная логика расчета цены
         return quantity * 10.0;
     }
 
@@ -92,20 +82,15 @@ private:
 
 int main() {
     setlocale(LC_ALL, "Russian");
-    // Создание магазина
     ClothingStore store;
+    store.addClothes("Г”ГіГІГЎГ®Г«ГЄГ ", 10);
+    store.addClothes("ГГІГ Г­Г»", 5);
 
-    // Добавление товаров на склад
-    store.addClothes("Футболка", 10);
-    store.addClothes("Штаны", 5);
+    std::cout << "Г‡Г ГЄГ Г§ ГґГіГІГЎГ®Г«ГЄГЁ Г±Г® Г±ГІГ Г­Г¤Г Г°ГІГ­Г®Г© Г¤Г®Г±ГІГ ГўГЄГ®Г©:" << std::endl;
+    store.orderClothes("Г”ГіГІГЎГ®Г«ГЄГ ", 2, "ГіГ«. Г‹ГҐГ­ГЁГ­Г , 1", new StandardShipping());
 
-    // Заказ товара со стандартной доставкой
-    std::cout << "Заказ футболки со стандартной доставкой:" << std::endl;
-    store.orderClothes("Футболка", 2, "ул. Ленина, 1", new StandardShipping());
-
-    // Заказ товара с экспресс-доставкой
-    std::cout << "Заказ штанов с экспресс-доставкой:" << std::endl;
-    store.orderClothes("Штаны", 1, "пр. Мира, 15", new ExpressShipping());
+    std::cout << "Г‡Г ГЄГ Г§ ГёГІГ Г­Г®Гў Г± ГЅГЄГ±ГЇГ°ГҐГ±Г±-Г¤Г®Г±ГІГ ГўГЄГ®Г©:" << std::endl;
+    store.orderClothes("ГГІГ Г­Г»", 1, "ГЇГ°. ГЊГЁГ°Г , 15", new ExpressShipping());
 
     return 0;
 }
